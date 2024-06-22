@@ -1,6 +1,7 @@
 package com.ecommerce.ProductService.Services;
 
 import com.ecommerce.ProductService.Exceptions.ProductNotFoundException;
+import com.ecommerce.ProductService.Modals.Category;
 import com.ecommerce.ProductService.Modals.Product;
 
 import java.util.List;
@@ -19,12 +20,13 @@ public interface productservice {
                           String category);
 
     void deleteProduct(Long productId) throws ProductNotFoundException;
-    List<Product> getSpecificCategory();
+//    List<Category> getAllCategories();
+    List<Product> getSpecificCategoryProducts(String item);
     Product updateProduct(Long productId,
                           String title,
                           double price,
                           String description,
                           String image,
-                          String category) throws ProductNotFoundException;
+                          String category);
 
 }

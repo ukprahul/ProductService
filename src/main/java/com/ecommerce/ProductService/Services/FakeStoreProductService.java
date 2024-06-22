@@ -1,8 +1,8 @@
 package com.ecommerce.ProductService.Services;
 
 import com.ecommerce.ProductService.Exceptions.ProductNotFoundException;
+import com.ecommerce.ProductService.Modals.Category;
 import com.ecommerce.ProductService.Modals.Product;
-import com.ecommerce.ProductService.dtos.CreateProductRequestDto;
 import com.ecommerce.ProductService.dtos.FakeStoreProductDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +11,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 //The code in this fakestoreProductService
@@ -23,7 +24,7 @@ import java.util.List;
 //    and work with responses
 
 
-@Service("fakestore")
+@Service("FakeStoreProductService")
 public class FakeStoreProductService implements productservice {
     private RestTemplate restTemplate;
 
@@ -94,37 +95,41 @@ public class FakeStoreProductService implements productservice {
         }
     }
 
+//    @Override
+//    public List<Category> getAllCategories()
+//    {
+//
+//        Category[] categories = restTemplate.getForObject("https://fakestoreapi.com/products/categories"
+//                ,String[].class);
+//        return Arrays.asList(categories);
+//
+//    }
+
     @Override
-    public List<Product> getSpecificCategory() {
-        return null;
+    public List<Product> getSpecificCategoryProducts(String item) {
+        FakeStoreProductDto[] fakeStoreProducts = restTemplate.getForObject(
+                "https://fakestoreapi.com/products/category/" + item,
+                FakeStoreProductDto[].class);
+        List<Product> products = new ArrayList<>();
+        for(FakeStoreProductDto fakeStoreItems:fakeStoreProducts){
+            products.add(fakeStoreItems.toProduct());
+        }
+        return products;
     }
+
 
     //    Update Product
     @Override
     public Product updateProduct(Long productId,String title,double price, String description, String image,
-                                 String category) throws ProductNotFoundException
+                                 String category)
     {
         FakeStoreProductDto responseUpdate = new FakeStoreProductDto();
-        responseUpdate.setTitle(title);
-        responseUpdate.setPrice(price);
-        responseUpdate.setDescription(description);
-        responseUpdate.setImage(image);
-        responseUpdate.setCategory(category);
         String url = "https://fakestoreapi.com/products/" + productId;
-        try {
-            restTemplate.put(url, responseUpdate);
-        } catch (HttpClientErrorException e)
-        {
-            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
-                throw new ProductNotFoundException("Product with id: " + productId + "doesn't exist. So Product can't be updated");
-            } else {
-                throw e;
-            }
-        }
-        return responseUpdate.toProduct();
+        restTemplate.put(url, responseUpdate);
+        // Fetch the updated product
+        return restTemplate.getForObject(url, Product.class);
 
     }
-
 
 }
 
