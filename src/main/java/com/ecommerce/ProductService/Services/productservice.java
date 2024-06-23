@@ -20,7 +20,6 @@ public interface productservice {
                           String category);
 
     void deleteProduct(Long productId) throws ProductNotFoundException;
-//    List<Category> getAllCategories();
     List<Product> getSpecificCategoryProducts(String item);
     Product updateProduct(Long productId,
                           String title,
@@ -28,5 +27,6 @@ public interface productservice {
                           String description,
                           String image,
                           String category);
+        List<String> getAllCategories();
 
 }

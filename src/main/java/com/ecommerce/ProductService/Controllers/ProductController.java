@@ -22,7 +22,7 @@ public class ProductController {
     productservice productService;
     RestTemplate restTemplate;
 
-    public ProductController(@Qualifier("FakeStoreProductService") productservice productService, RestTemplate restTemplate) {
+    public ProductController(@Qualifier("selfService") productservice productService, RestTemplate restTemplate) {
         this.productService = productService;
         this.restTemplate = restTemplate;
     }
@@ -83,10 +83,10 @@ public class ProductController {
     {
         return productService.getSpecificCategoryProducts(item);
     }
-//    @GetMapping("/products/categories")
-//    public List<Category> getAllCategories(){
-//        return productService.getAllCategories();
-//    }
+    @GetMapping("/products/categories")
+    public List<String> getAllCategories(){
+        return productService.getAllCategories();
+    }
 
 }
 

@@ -13,6 +13,6 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     Category findByTitle(String title);
 
-//    @Query("SELECT c.title FROM Category c")
-//    List<Category> findAllCategories();
+    @Query("SELECT c.title FROM Category c")
+    List<String> findAllCategoryTitles();
 }

@@ -61,15 +61,11 @@ public class SelfProductService implements productservice {
         productRepository.deleteById(productId);
     }
 
-//    @Override
-//    public List<Category> getAllCategories()
-//    {
-//        List<Category> categories = categoryRepository.findAll();
-//        return categories.stream()
-//                .map(Category::getTitle)
-//                .collect(Collectors.toList());
-//        categoryRepository.findAll();
-//    }
+    @Override
+    public List<String> getAllCategories()
+    {
+        return categoryRepository.findAllCategoryTitles();
+    }
 
     @Override
     public List<Product> getSpecificCategoryProducts(String item) {

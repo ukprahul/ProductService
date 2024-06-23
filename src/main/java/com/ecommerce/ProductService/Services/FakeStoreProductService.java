@@ -32,6 +32,7 @@ public class FakeStoreProductService implements productservice {
         this.restTemplate = restTemplate;
     }
 
+
     public Product getSingleProduct(Long productId) throws ProductNotFoundException {
 
         //Here I am going to call the external api
@@ -62,7 +63,6 @@ public class FakeStoreProductService implements productservice {
     }
 
 
-    //create product
     @Override
     public Product createProduct(String title, double price, String description, String image,
                                  String category) {
@@ -80,7 +80,6 @@ public class FakeStoreProductService implements productservice {
 
     }
 
-    //delete product
 
     @Override
     public void deleteProduct(Long productId) throws ProductNotFoundException {
@@ -95,15 +94,15 @@ public class FakeStoreProductService implements productservice {
         }
     }
 
-//    @Override
-//    public List<Category> getAllCategories()
-//    {
-//
-//        Category[] categories = restTemplate.getForObject("https://fakestoreapi.com/products/categories"
-//                ,String[].class);
-//        return Arrays.asList(categories);
-//
-//    }
+    @Override
+    public List<String> getAllCategories()
+    {
+
+        String[] categories = restTemplate.getForObject("https://fakestoreapi.com/products/categories"
+                ,String[].class);
+        return Arrays.asList(categories);
+
+    }
 
     @Override
     public List<Product> getSpecificCategoryProducts(String item) {
