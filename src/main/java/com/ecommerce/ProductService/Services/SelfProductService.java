@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service("selfService")
@@ -74,6 +75,27 @@ public class SelfProductService implements productservice {
 
     @Override
     public Product updateProduct(Long productId, String title, double price, String description, String image, String category) {
-        return null;
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        Product product;
+        if(optionalProduct.isPresent()){
+            product = optionalProduct.get();
+        }
+        else{
+            product = new Product();
+        }
+        product.setTitle(title);
+        product.setPrice(price);
+        product.setDescription(description);
+        product.setImageUrl(image);
+        Category categoryFromDatabase = categoryRepository.findByTitle(category);
+
+        if(categoryFromDatabase==null){
+            Category newCategory = new Category();
+            newCategory.setTitle(category);
+            categoryFromDatabase = newCategory;
+        }
+        product.setCategory(categoryFromDatabase);
+        Product saveProduct = productRepository.save(product);
+        return saveProduct;
     }
 }
