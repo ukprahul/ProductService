@@ -69,7 +69,7 @@ public class SelfProductService implements productservice {
 
     @Override
     public List<Product> getSpecificCategoryProducts(String item) {
-        return null;
+        return categoryRepository.findProductsByCategoryTitle(item);
     }
 
     @Override
