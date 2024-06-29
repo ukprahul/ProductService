@@ -26,15 +26,13 @@ public class ProductController {
         this.productService = productService;
         this.restTemplate = restTemplate;
     }
-    //selfService   //FakeStoreProductService
-    //@qualifer is used for to find the dependency to the injected above.
+    //refer notes below
 
     @GetMapping("/products/{id}")
     public Product getProductDetails(@PathVariable("id") Long productId) throws ProductNotFoundException {
         return productService.getSingleProduct(productId);
     }
 
-    //getProducts from a category first
     @GetMapping("/products")
     public List<Product> getAllProduct() {
         return productService.getAllProducts();
@@ -91,6 +89,13 @@ public class ProductController {
 }
 
 
+//Notes
+
+//selfService   //FakeStoreProductService
+//@qualifier is used for to find the dependency to the injected above.
+//qualifier is also used to change the service
+//from fakestore to selfservice , with the help of dependency injection
+//Which we are using here as a constructor.
 
 
 
