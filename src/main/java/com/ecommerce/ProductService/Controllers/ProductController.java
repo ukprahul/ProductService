@@ -22,7 +22,7 @@ public class ProductController {
     productservice productService;
     RestTemplate restTemplate;
 
-    public ProductController(@Qualifier("selfService") productservice productService, RestTemplate restTemplate) {
+    public ProductController(@Qualifier("FakeStoreProductService") productservice productService, RestTemplate restTemplate) {
         this.productService = productService;
         this.restTemplate = restTemplate;
     }

@@ -4,6 +4,8 @@ import com.ecommerce.ProductService.Exceptions.ProductNotFoundException;
 import com.ecommerce.ProductService.Modals.Category;
 import com.ecommerce.ProductService.Modals.Product;
 import com.ecommerce.ProductService.dtos.FakeStoreProductDto;
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,18 +25,23 @@ import java.util.List;
 // - allows to send HTTP requests to external URLs/apis
 //    and work with responses
 
-
 @Service("FakeStoreProductService")
 public class FakeStoreProductService implements productservice {
     private RestTemplate restTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
-    public FakeStoreProductService(RestTemplate restTemplate) {
+    public FakeStoreProductService(RestTemplate restTemplate,RedisTemplate<String,Object> redisTemplate) {
         this.restTemplate = restTemplate;
+        this.redisTemplate = redisTemplate;
     }
 
 
     public Product getSingleProduct(Long productId) throws ProductNotFoundException {
 
+        Product p = (Product) redisTemplate.opsForHash().get("Products", "Product_" + productId);
+        if(p!=null){
+            return p;
+        }
         //Here I am going to call the external api
         ResponseEntity<FakeStoreProductDto> fakeStoreProductResponse = restTemplate.getForEntity(
                 "https://fakestoreapi.com/products/" + productId,
@@ -43,10 +50,9 @@ public class FakeStoreProductService implements productservice {
         if(fakeStoreProduct==null){
             throw new ProductNotFoundException("Product with id: "+ productId+"doesn't exist. Retry some other products");
         }
-
-        return fakeStoreProduct.toProduct();
-
-
+        Product p1 = fakeStoreProduct.toProduct();
+        redisTemplate.opsForHash().put("Products","Product_"+productId,p1);
+        return p1;
     }
 
     @Override
